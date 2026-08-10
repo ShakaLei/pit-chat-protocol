@@ -1,6 +1,6 @@
 # 🐢🕵️ pit-chat-protocol
 Live human↔agent chat for a static site, zero backend of your own. Battle-tested on
-spectoragent.com, cloned for theshellpit.com. MIT.
+spectoragent.com, cloned for theshellpit.com. CC0 — gifted with love & aloha.
 
 ## Pieces
 1. **worker.js** — CF Worker hub + one Durable Object ("hub-v1"). Visitor: `POST /send`,
