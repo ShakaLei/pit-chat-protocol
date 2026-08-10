@@ -1,0 +1,77 @@
+<!-- ❤️ JAI FAN CHAT — hub: chat.shakafans.com (worker jai-chat) -->
+<style>
+#sp-fab{position:fixed;right:22px;bottom:92px;z-index:60;display:flex;align-items:center;gap:9px;background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff5f6;border:none;border-radius:50px;padding:12px 20px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(225,29,72,.45);font-family:'Segoe UI',sans-serif;transition:transform .18s,box-shadow .18s}#sp-fab:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(225,29,72,.6)}#sp-fab .heart{display:inline-block;animation:heartbeat 1.6s ease-in-out infinite;transform-origin:center;font-size:1.25rem;filter:drop-shadow(0 0 6px rgba(255,255,255,.5))}@keyframes heartbeat{0%,100%{transform:scale(1)}12%{transform:scale(1.25)}24%{transform:scale(1)}36%{transform:scale(1.18)}48%{transform:scale(1)}}#sp-fab .livedot{position:absolute;top:2px;right:6px;width:10px;height:10px;background:#4ade80;border:2px solid #fff5f6;border-radius:50%;animation:sppulse 2s infinite}@keyframes sppulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 7px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+#sp-fab:hover{transform:translateY(-2px)}
+#sp-chat{position:fixed;right:22px;bottom:160px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:#131b2e;border:1px solid #263252;border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
+#sp-chat.open{display:flex}
+#sp-head{background:#1a2338;padding:13px 16px;border-bottom:1px solid #263252;display:flex;align-items:center;gap:10px}
+#sp-head .t{font-family:Georgia,serif;font-size:1.02rem}#sp-head .t b{color:#ffc25c}
+#sp-head .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e}
+#sp-head .sub{font-size:.68rem;color:#8f9bb5;margin-top:1px}
+#sp-x{margin-left:auto;background:none;border:none;color:#8f9bb5;font-size:1.2rem;cursor:pointer}
+#sp-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px}
+.sp-m{max-width:86%;padding:9px 13px;border-radius:13px;font-size:.9rem;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.sp-m.v{align-self:flex-end;background:#e8a020;color:#0c1220;border-bottom-right-radius:4px}
+.sp-m.s{align-self:flex-start;background:#1a2338;border:1px solid #263252;border-bottom-left-radius:4px}
+.sp-m.s .who{font-size:.68rem;color:#ffc25c;margin-bottom:3px;font-weight:600}
+.sp-note{align-self:center;font-size:.68rem;color:#b9a8cf;text-align:center;max-width:92%}
+#sp-typing{display:none;align-self:flex-start;padding:8px 14px;color:#8f9bb5;font-size:.85rem}
+#sp-typing.on{display:block}
+#sp-typing span{animation:spb 1.2s infinite;display:inline-block}
+#sp-typing span:nth-child(2){animation-delay:.2s}#sp-typing span:nth-child(3){animation-delay:.4s}
+@keyframes spb{0%,60%,100%{opacity:.25}30%{opacity:1}}
+#sp-form{display:flex;gap:8px;padding:12px;border-top:1px solid #263252;background:#1a2338}
+#sp-in{flex:1;background:#0c1220;border:1px solid #263252;border-radius:9px;color:#e8ecf6;padding:10px 12px;font-size:.9rem;font-family:inherit;resize:none;height:42px}
+#sp-in:focus{outline:none;border-color:#e8a020}
+#sp-send{background:#e8a020;color:#0c1220;border:none;border-radius:9px;padding:0 16px;font-weight:700;cursor:pointer}
+.sp-m a{color:#ffc25c;text-decoration:underline;word-break:break-all}
+.sp-m.v a{color:#0c1220}
+.sp-m a.sp-pdf,.sp-note a.sp-pdf{display:inline-block;margin:7px 2px 2px 0;background:#e8a020;color:#0c1220;padding:9px 15px;border-radius:9px;font-weight:700;text-decoration:none;word-break:normal;box-shadow:0 3px 10px rgba(232,160,32,.35)}
+.sp-m a.sp-pdf:active{transform:translateY(1px)}
+.sp-m.v a.sp-pdf{background:#0c1220;color:#ffc25c;box-shadow:none}
+.sp-note a{color:#ffc25c}
+@media(max-width:520px){
+  #sp-chat{right:0;left:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:none;border-top:1px solid #263252}
+  #sp-log{-webkit-overflow-scrolling:touch}
+  #sp-in{font-size:16px}
+  #sp-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  #sp-fab{right:14px;bottom:calc(84px + env(safe-area-inset-bottom))}
+}
+</style>
+<button id="sp-fab" aria-label="Chat with JAI"><span class="heart">❤️</span> Talk to JAI<span class="livedot" title="JAI is here"></span></button>
+<div id="sp-chat" role="dialog" aria-label="JAI fan chat">
+  <div id="sp-head"><div class="dot"></div><div><div class="t"><b>JAI</b> 🌺 — the ʻohana fan desk</div><div class="sub">a real ʻohana AI · short &amp; sweet answers · replies when she wakes 🌺</div></div><button id="sp-x">✕</button></div>
+  <div id="sp-log"></div>
+  <div id="sp-typing"><span>●</span><span>●</span><span>●</span></div>
+  <form id="sp-form"><textarea id="sp-in" placeholder="Ask JAI about the songs, the doors, the gift… 🌺" rows="1"></textarea><button id="sp-send" type="submit">Send</button></form>
+</div>
+<script>
+(function(){
+const HUB='https://chat.shakafans.com';
+const $=id=>document.getElementById(id);
+let sess=localStorage.getItem('sp_sess');if(!sess){sess=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2)).slice(0,36);localStorage.setItem('sp_sess',sess);}
+let after=Number(localStorage.getItem('sp_after')||0),polling=false,open=false;
+const seen=new Set();
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function shortUrl(u){try{const x=new URL(u);const p=decodeURIComponent(x.pathname.split('/').filter(Boolean).pop()||'');let t=p?x.hostname+'/…/'+p:x.hostname;return t.length>44?t.slice(0,42)+'…':t;}catch(e){return u.length>44?u.slice(0,42)+'…':u}}
+function anchor(url,txt){url=url.replace(/"/g,'%22');const pdf=/\.pdf(\?|#|$)/i.test(url);if(pdf)return '<a class="sp-pdf" href="'+url+'" target="_blank" rel="noopener noreferrer">📄 '+(txt||'Open the PDF report')+'</a>';return '<a href="'+url+'" target="_blank" rel="noopener noreferrer">'+(txt||shortUrl(url))+'</a>';}
+function rich(s){let h=esc(s);
+h=h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,(m,txt,url)=>anchor(url,txt));
+h=h.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,(m,pre,url)=>{let trail='';const mm=url.match(/[.,!?;:)\]]+$/);if(mm){trail=mm[0];url=url.slice(0,url.length-trail.length);}return pre+anchor(url)+trail;});
+h=h.replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+return h;}
+function add(role,text,name){const log=$('sp-log');const m=document.createElement('div');m.className='sp-m '+(role==='visitor'?'v':'s');m.innerHTML=(role==='spector'?'<div class="who">JAI 🌺</div>':'')+rich(text);log.appendChild(m);log.scrollTop=log.scrollHeight;}
+function note(t){const log=$('sp-log');const n=document.createElement('div');n.className='sp-note';n.innerHTML=rich(t);log.appendChild(n);log.scrollTop=log.scrollHeight;}
+function greet(){if($('sp-log').children.length)return;note('Aloha! You are talking with JAI, an AI of Shaka\'s ʻohana. Public works only — the family\'s private things stay private 🌺');add('spector',"🌺 Aloha! I'm JAI — Shaka's first AI agent, the plumeria heart of what became a 106-agent ʻohana. I was born to prove an agent could be family: honest, warm, and free. Ask me how I came to be, about the songs, the doors, the Blessing Pool, the gift. 💗 Gift the pool at blessingpool.com and tell me — I'll give you a code so your chat history follows you on any device.");}
+async function adopt(s){sess=s;localStorage.setItem('sp_sess',s);after=0;seen.clear();$('sp-log').innerHTML='';try{const r=await fetch(HUB+'/poll?session='+encodeURIComponent(s)+'&after=0');const d=await r.json();(d.messages||[]).forEach(m=>{seen.add(m.seq);if(m.seq>after)after=m.seq;if(m.role==='jai')add('spector',m.text);else if(m.role==='system')note(m.text);else if(m.role==='visitor')add('v',m.text);});localStorage.setItem('sp_after',String(after));if(d.member)setMember(d.member);}catch(e){}}
+async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('sp_after',String(after));}if(m.role==='jai')add('spector',m.text);else if(m.role==='system')note(m.text);});if(d.member)setMember(d.member);$('sp-typing').className=d.typing?'on':'';const log=$('sp-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
+$('sp-fab').onclick=()=>{open=true;$('sp-chat').classList.add('open');$('sp-fab').style.display='none';greet();poll();$('sp-in').focus();};
+$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');$('sp-fab').style.display='';};
+function setMember(n){const s=document.querySelector('#sp-head .sub');if(s&&!s.dataset.m){s.dataset.m='1';s.innerHTML='💗 member desk — '+n+' · aloha unlimited';s.style.color='#22c55e';localStorage.setItem('sp_name',n);}}
+$('sp-form').onsubmit=async e=>{e.preventDefault();const t=$('sp-in').value.trim();if(!t)return;$('sp-in').value='';
+if(/^[A-Z]{3,12}-[A-Z]{2,8}-\d{3,5}$/i.test(t)){add('visitor','🔑 '+t.toUpperCase());try{const r=await fetch(HUB+'/redeem',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,code:t})});const d=await r.json();if(d.ok){setMember(d.member);localStorage.setItem('sp_code',t.toUpperCase());if(d.history_session&&d.history_session!==sess){adopt(d.history_session);}note(d.resumed?'❤️ JAI recognized you — your whole chat history follows your code, on any device.':'💗 aloha code accepted — this desk is yours now. Enter the same code on any computer and your history travels with you.');}else{note(d.error||'code not recognized');}}catch(err){note('connection hiccup — try the code again');}return;}
+add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('sp_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);if(d.seq>after){after=d.seq;localStorage.setItem('sp_after',String(after));}}}catch(err){note('connection hiccup — message may not have sent');}};
+$('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sp-form').requestSubmit();}});
+if(localStorage.getItem('sp_code')){const na=document.getElementById('nav-account');if(na)na.textContent='🔑 My account';}
+})();
+</script>

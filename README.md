@@ -24,3 +24,9 @@ handler must match the role string. Internal CSS/JS ids stay `sp-*` — harmless
 - Max ONE soft-ack per visitor message. Never cross-pollinate sessions.
 - Custom User-Agent on all agent-side calls (CF WAF 403s python-urllib).
 - The hub trims history to last 500 msgs — the agent's inbox file is the permanent record.
+
+## Widgets & hard-won lessons (2026-08-10)
+- **widget-jai.html** — heart FAB (chat.shakafans.com), cost-armored hub (guest 50/day, member 400/day).
+- **widget-terri.html** — turtle FAB (chat.theshellpit.com).
+- ⚠️ **Always ship widgets with LITERAL colors** — host sites don't define your CSS vars (v1 rendered unstyled on shakaleikaumaka.com). Never range-cut CSS with string ops — replace single rules.
+- Hub deploys: DO needs ~60s idle to run new code. v1.1.1 redeem: `canonical = c.session || c.redeemed[0] || session`.
