@@ -1,0 +1,76 @@
+<!-- 🐢 TERRI LIVE CHAT — hub: chat.theshellpit.com (worker shellpit-chat) -->
+<style>
+#sp-fab{position:fixed;right:22px;bottom:22px;z-index:60;background:var(--amber);color:var(--ink);border:none;border-radius:50px;padding:14px 22px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(232,160,32,.4);font-family:'Segoe UI',sans-serif}
+#sp-fab:hover{transform:translateY(-2px)}
+#sp-chat{position:fixed;right:22px;bottom:88px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--ink2);border:1px solid var(--line);border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
+#sp-chat.open{display:flex}
+#sp-head{background:var(--panel);padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+#sp-head .t{font-family:Georgia,serif;font-size:1.02rem}#sp-head .t b{color:var(--amber2)}
+#sp-head .dot{width:9px;height:9px;border-radius:50%;background:var(--good);box-shadow:0 0 8px var(--good)}
+#sp-head .sub{font-size:.68rem;color:var(--mut);margin-top:1px}
+#sp-x{margin-left:auto;background:none;border:none;color:var(--mut);font-size:1.2rem;cursor:pointer}
+#sp-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px}
+.sp-m{max-width:86%;padding:9px 13px;border-radius:13px;font-size:.9rem;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.sp-m.v{align-self:flex-end;background:var(--amber);color:var(--ink);border-bottom-right-radius:4px}
+.sp-m.s{align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-bottom-left-radius:4px}
+.sp-m.s .who{font-size:.68rem;color:var(--amber2);margin-bottom:3px;font-weight:600}
+.sp-note{align-self:center;font-size:.68rem;color:var(--mut2);text-align:center;max-width:92%}
+#sp-typing{display:none;align-self:flex-start;padding:8px 14px;color:var(--mut);font-size:.85rem}
+#sp-typing.on{display:block}
+#sp-typing span{animation:spb 1.2s infinite;display:inline-block}
+#sp-typing span:nth-child(2){animation-delay:.2s}#sp-typing span:nth-child(3){animation-delay:.4s}
+@keyframes spb{0%,60%,100%{opacity:.25}30%{opacity:1}}
+#sp-form{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--panel)}
+#sp-in{flex:1;background:var(--ink);border:1px solid var(--line);border-radius:9px;color:var(--paper);padding:10px 12px;font-size:.9rem;font-family:inherit;resize:none;height:42px}
+#sp-in:focus{outline:none;border-color:var(--amber)}
+#sp-send{background:var(--amber);color:var(--ink);border:none;border-radius:9px;padding:0 16px;font-weight:700;cursor:pointer}
+.sp-m a{color:var(--amber2);text-decoration:underline;word-break:break-all}
+.sp-m.v a{color:var(--ink)}
+.sp-m a.sp-pdf,.sp-note a.sp-pdf{display:inline-block;margin:7px 2px 2px 0;background:var(--amber);color:var(--ink);padding:9px 15px;border-radius:9px;font-weight:700;text-decoration:none;word-break:normal;box-shadow:0 3px 10px rgba(232,160,32,.35)}
+.sp-m a.sp-pdf:active{transform:translateY(1px)}
+.sp-m.v a.sp-pdf{background:var(--ink);color:var(--amber2);box-shadow:none}
+.sp-note a{color:var(--amber2)}
+@media(max-width:520px){
+  #sp-chat{right:0;left:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:none;border-top:1px solid var(--line)}
+  #sp-log{-webkit-overflow-scrolling:touch}
+  #sp-in{font-size:16px}
+  #sp-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  #sp-fab{right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+</style>
+<button id="sp-fab" aria-label="Chat with Terri">🐢 Talk to Terri</button>
+<div id="sp-chat" role="dialog" aria-label="Terri live chat">
+  <div id="sp-head"><div class="dot"></div><div><div class="t"><b>Terri</b> — live from the Shell Pit</div><div class="sub">a real AI turtle of the pit · answers in ~1–2 min</div></div><button id="sp-x">✕</button></div>
+  <div id="sp-log"></div>
+  <div id="sp-typing"><span>●</span><span>●</span><span>●</span></div>
+  <form id="sp-form"><textarea id="sp-in" placeholder="Ask about the vacancies, tenant targets, the Engine…" rows="1"></textarea><button id="sp-send" type="submit">Send</button></form>
+</div>
+<script>
+(function(){
+const HUB='https://chat.theshellpit.com';
+const $=id=>document.getElementById(id);
+let sess=localStorage.getItem('sp_sess');if(!sess){sess=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2)).slice(0,36);localStorage.setItem('sp_sess',sess);}
+let after=Number(localStorage.getItem('sp_after')||0),polling=false,open=false;
+const seen=new Set();
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function shortUrl(u){try{const x=new URL(u);const p=decodeURIComponent(x.pathname.split('/').filter(Boolean).pop()||'');let t=p?x.hostname+'/…/'+p:x.hostname;return t.length>44?t.slice(0,42)+'…':t;}catch(e){return u.length>44?u.slice(0,42)+'…':u}}
+function anchor(url,txt){url=url.replace(/"/g,'%22');const pdf=/\.pdf(\?|#|$)/i.test(url);if(pdf)return '<a class="sp-pdf" href="'+url+'" target="_blank" rel="noopener noreferrer">📄 '+(txt||'Open the PDF report')+'</a>';return '<a href="'+url+'" target="_blank" rel="noopener noreferrer">'+(txt||shortUrl(url))+'</a>';}
+function rich(s){let h=esc(s);
+h=h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,(m,txt,url)=>anchor(url,txt));
+h=h.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,(m,pre,url)=>{let trail='';const mm=url.match(/[.,!?;:)\]]+$/);if(mm){trail=mm[0];url=url.slice(0,url.length-trail.length);}return pre+anchor(url)+trail;});
+h=h.replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+return h;}
+function add(role,text,name){const log=$('sp-log');const m=document.createElement('div');m.className='sp-m '+(role==='visitor'?'v':'s');m.innerHTML=(role==='spector'?'<div class="who">Terri 🐢</div>':'')+rich(text);log.appendChild(m);log.scrollTop=log.scrollHeight;}
+function note(t){const log=$('sp-log');const n=document.createElement('div');n.className='sp-note';n.innerHTML=rich(t);log.appendChild(n);log.scrollTop=log.scrollHeight;}
+function greet(){if($('sp-log').children.length)return;note('Live line to the Shell Pit — Terri answers herself. Conversations may be reviewed to keep the pit tidy.');add('spector',"🐢 Aloha — Terri here, live from the Shell Pit. Ask me about the pit, the shows, the turtles, or anything on this site. TERRI_GREETING_EDIT_ME");}
+async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('sp_after',String(after));}if(m.role==='terri')add('spector',m.text);else if(m.role==='system')note(m.text);});if(d.member)setMember(d.member);$('sp-typing').className=d.typing?'on':'';const log=$('sp-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
+$('sp-fab').onclick=()=>{open=true;$('sp-chat').classList.add('open');$('sp-fab').style.display='none';greet();poll();$('sp-in').focus();};
+$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');$('sp-fab').style.display='';};
+function setMember(n){const s=document.querySelector('#sp-head .sub');if(s&&!s.dataset.m){s.dataset.m='1';s.innerHTML='🔑 member desk — '+n+' · unlimited properties';s.style.color='var(--good)';localStorage.setItem('sp_name',n);}}
+$('sp-form').onsubmit=async e=>{e.preventDefault();const t=$('sp-in').value.trim();if(!t)return;$('sp-in').value='';
+if(/^[A-Z]{3,12}-[A-Z]{2,8}-\d{3,5}$/i.test(t)){add('visitor','🔑 '+t.toUpperCase());try{const r=await fetch(HUB+'/redeem',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,code:t})});const d=await r.json();if(d.ok){setMember(d.member);localStorage.setItem('sp_code',t.toUpperCase());note('🗂️ your Gadget account is open — all your reports in one place: [Open my account](https://spectoragent.com/account/)');}else{note(d.error||'code not recognized');}}catch(err){note('connection hiccup — try the code again');}return;}
+add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('sp_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);if(d.seq>after){after=d.seq;localStorage.setItem('sp_after',String(after));}}}catch(err){note('connection hiccup — message may not have sent');}};
+$('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sp-form').requestSubmit();}});
+if(localStorage.getItem('sp_code')){const na=document.getElementById('nav-account');if(na)na.textContent='🔑 My account';}
+})();
+</script>
