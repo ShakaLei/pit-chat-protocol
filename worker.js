@@ -135,14 +135,20 @@ export class Hub {
         if (!session || !code) return J({ error: "session and code required" }, 400);
         const c = this.codes[code];
         if (!c) return J({ ok: false, error: "code not recognized — check with whoever gave it to you 🌺" }, 404);
-        this.members[session] = { code, name: c.name, since: Date.now() };
+        // v1.1 PORTABLE HISTORY: each code owns ONE canonical session (the first device that
+        // redeemed it). Every later device adopts that session -> history follows the code.
+        const canonical = c.session || session;
+        if (!c.session) c.session = session;
+        this.members[canonical] = { code, name: c.name, since: Date.now() };
         if (!c.redeemed.includes(session)) c.redeemed.push(session);
-        const m = { seq: ++this.seq, session, role: "system", name: "hub", member: c.name, text: `🔑 access code redeemed — welcome, ${c.name}! Unlimited desk unlocked.`, ts: Date.now() };
+        const resumed = canonical !== session;
+        const m = { seq: ++this.seq, session: canonical, role: "system", name: "hub", member: c.name, text: resumed ? `🔑 ${c.name} resumed their desk from a new device — history restored.` : `🔑 access code redeemed — welcome, ${c.name}! Unlimited desk unlocked.`, ts: Date.now() };
         this.msgs.push(m);
         await this.persist();
         this.wakeAgent();
+        this.wakeVisitor(canonical);
         this.wakeVisitor(session);
-        return J({ ok: true, member: c.name });
+        return J({ ok: true, member: c.name, history_session: canonical, resumed });
       }
       if (p === "/account/profile" && req.method === "POST") {
         const b = await req.json();
