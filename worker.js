@@ -137,7 +137,7 @@ export class Hub {
         if (!c) return J({ ok: false, error: "code not recognized — check with whoever gave it to you 🌺" }, 404);
         // v1.1 PORTABLE HISTORY: each code owns ONE canonical session (the first device that
         // redeemed it). Every later device adopts that session -> history follows the code.
-        const canonical = c.session || session;
+        const canonical = c.session || (c.redeemed && c.redeemed[0]) || session; // v1.1.1: pre-v1.1 codes adopt their first-ever session's history (Spector's one-liner)
         if (!c.session) c.session = session;
         this.members[canonical] = { code, name: c.name, since: Date.now() };
         if (!c.redeemed.includes(session)) c.redeemed.push(session);
