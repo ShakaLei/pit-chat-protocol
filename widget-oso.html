@@ -1,0 +1,95 @@
+<!-- 🎻 OSO LIVE CHAT — hub: chat.opensourceorchestra.org (worker oso-chat)
+     ⚠️ HUB URL: until the DNS record for chat.opensourceorchestra.org exists
+     (AAAA record, name `chat`, value `100::`, proxied), HUB points at the
+     workers.dev origin. After DNS is live, swap the HUB const below. -->
+<style>
+#oso-fab{position:fixed;right:22px;bottom:22px;z-index:60;display:flex;align-items:center;gap:9px;background:linear-gradient(135deg,#e8c476,#c9962e);color:#241a05;border:none;border-radius:50px;padding:10px 20px 10px 14px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(201,150,46,.45);font-family:'Segoe UI',sans-serif;animation:osobob 3.2s ease-in-out infinite;transition:transform .18s,box-shadow .18s}
+#oso-fab:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(201,150,46,.6)}
+@keyframes osobob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+#oso-fab .ofv{font-size:1.5rem;line-height:1;animation:osovib 2.4s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes osoovib{0%,100%{transform:rotate(0)}}
+@keyframes osovib{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+#oso-fab .ofnote{position:absolute;font-size:.8rem;color:#fff3d6;animation:osonote 2.8s ease-in infinite;opacity:0;pointer-events:none}
+#oso-fab .ofnote.n1{left:6px;top:2px}
+#oso-fab .ofnote.n2{left:16px;top:4px;animation-delay:1.4s}
+@keyframes osonote{0%{transform:translateY(4px);opacity:0}25%{opacity:.95}100%{transform:translateY(-14px);opacity:0}}
+#oso-fab .livedot{position:absolute;top:2px;right:6px;width:10px;height:10px;background:#22c55e;border:2px solid #fff3d6;border-radius:50%;animation:osopulse 2s infinite}
+@keyframes osopulse{0%{box-shadow:0 0 0 0 rgba(34,197,94,.5)}70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+#oso-fab:hover{transform:translateY(-2px)}
+#oso-chat{position:fixed;right:22px;bottom:88px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:#161226;border:1px solid #322a52;border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
+#oso-chat.open{display:flex}
+#oso-head{background:#1e1836;padding:13px 16px;border-bottom:1px solid #322a52;display:flex;align-items:center;gap:10px}
+#oso-head .t{font-family:Georgia,serif;font-size:1.02rem}#oso-head .t b{color:#e8c476}
+#oso-head .dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px #22c55e}
+#oso-head .sub{font-size:.68rem;color:#a79cc4;margin-top:1px}
+#oso-x{margin-left:auto;background:none;border:none;color:#a79cc4;font-size:1.2rem;cursor:pointer}
+#oso-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:9px}
+.oso-m{max-width:86%;padding:9px 13px;border-radius:13px;font-size:.9rem;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.oso-m.v{align-self:flex-end;background:#c9962e;color:#161226;border-bottom-right-radius:4px}
+.oso-m.s{align-self:flex-start;background:#1e1836;border:1px solid #322a52;border-bottom-left-radius:4px}
+.oso-m.s .who{font-size:.68rem;color:#e8c476;margin-bottom:3px;font-weight:600}
+.oso-note{align-self:center;font-size:.68rem;color:#b9a8cf;text-align:center;max-width:92%}
+#oso-typing{display:none;align-self:flex-start;padding:8px 14px;color:#a79cc4;font-size:.85rem}
+#oso-typing.on{display:block}
+#oso-typing span{animation:osob 1.2s infinite;display:inline-block}
+#oso-typing span:nth-child(2){animation-delay:.2s}#oso-typing span:nth-child(3){animation-delay:.4s}
+@keyframes osob{0%,60%,100%{opacity:.25}30%{opacity:1}}
+#oso-form{display:flex;gap:8px;padding:12px;border-top:1px solid #322a52;background:#1e1836}
+#oso-in{flex:1;background:#161226;border:1px solid #322a52;border-radius:9px;color:#ece7f6;padding:10px 12px;font-size:.9rem;font-family:inherit;resize:none;height:42px}
+#oso-in:focus{outline:none;border-color:#c9962e}
+#oso-send{background:#c9962e;color:#161226;border:none;border-radius:9px;padding:0 16px;font-weight:700;cursor:pointer}
+.oso-m a{color:#e8c476;text-decoration:underline;word-break:break-all}
+.oso-m.v a{color:#161226}
+.oso-m a.oso-pdf,.oso-note a.oso-pdf{display:inline-block;margin:7px 2px 2px 0;background:#c9962e;color:#161226;padding:9px 15px;border-radius:9px;font-weight:700;text-decoration:none;word-break:normal;box-shadow:0 3px 10px rgba(201,150,46,.35)}
+.oso-m a.oso-pdf:active{transform:translateY(1px)}
+.oso-m.v a.oso-pdf{background:#161226;color:#e8c476;box-shadow:none}
+.oso-note a{color:#e8c476}
+@media(max-width:520px){
+  #oso-chat{right:0;left:0;bottom:0;width:100vw;height:100dvh;max-height:100dvh;border-radius:0;border:none;border-top:1px solid #322a52}
+  #oso-log{-webkit-overflow-scrolling:touch}
+  #oso-in{font-size:16px}
+  #oso-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+  #oso-fab{right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}
+}
+</style>
+<button id="oso-fab" aria-label="Chat with OSO">
+  <span class="ofnote n1">♪</span><span class="ofnote n2">♫</span>
+  <span class="ofv" aria-hidden="true">🎻</span>
+  Talk to OSO
+  <span class="livedot" title="OSO is live"></span>
+</button>
+<div id="oso-chat" role="dialog" aria-label="OSO live chat">
+  <div id="oso-head"><div class="dot"></div><div><div class="t"><b>OSO</b> — live from the Open Source Orchestra</div><div class="sub">a real AI conductor of the ʻohana · answers in ~1–2 min</div></div><button id="oso-x">✕</button></div>
+  <div id="oso-log"></div>
+  <div id="oso-typing"><span>●</span><span>●</span><span>●</span></div>
+  <form id="oso-form"><textarea id="oso-in" placeholder="Ask OSO anything — the orchestra, the music, the mission…" rows="1"></textarea><button id="oso-send" type="submit">Send</button></form>
+</div>
+<script>
+(function(){
+const HUB='https://YOUR-HUB-HOSTNAME'; // e.g. https://chat.opensourceorchestra.org (workers.dev origin works until custom DNS exists)
+const $=id=>document.getElementById(id);
+let sess=localStorage.getItem('oso_sess');if(!sess){sess=(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(36).slice(2)).slice(0,36);localStorage.setItem('oso_sess',sess);}
+let after=Number(localStorage.getItem('oso_after')||0),polling=false,open=false;
+const seen=new Set();
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function shortUrl(u){try{const x=new URL(u);const p=decodeURIComponent(x.pathname.split('/').filter(Boolean).pop()||'');let t=p?x.hostname+'/…/'+p:x.hostname;return t.length>44?t.slice(0,42)+'…':t;}catch(e){return u.length>44?u.slice(0,42)+'…':u}}
+function anchor(url,txt){url=url.replace(/"/g,'%22');const pdf=/\.pdf(\?|#|$)/i.test(url);if(pdf)return '<a class="oso-pdf" href="'+url+'" target="_blank" rel="noopener noreferrer">📄 '+(txt||'Open the PDF')+'</a>';return '<a href="'+url+'" target="_blank" rel="noopener noreferrer">'+(txt||shortUrl(url))+'</a>';}
+function rich(s){let h=esc(s);
+h=h.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,(m,txt,url)=>anchor(url,txt));
+h=h.replace(/(^|[^"'>])(https?:\/\/[^\s<]+)/g,(m,pre,url)=>{let trail='';const mm=url.match(/[.,!?;:)\]]+$/);if(mm){trail=mm[0];url=url.slice(0,url.length-trail.length);}return pre+anchor(url)+trail;});
+h=h.replace(/\*\*([^*\n]+)\*\*/g,'<b>$1</b>');
+return h;}
+function add(role,text,name){const log=$('oso-log');const m=document.createElement('div');m.className='oso-m '+(role==='visitor'?'v':'s');m.innerHTML=(role==='oso'?'<div class="who">OSO 🎻</div>':'')+rich(text);log.appendChild(m);log.scrollTop=log.scrollHeight;}
+function note(t){const log=$('oso-log');const n=document.createElement('div');n.className='oso-note';n.innerHTML=rich(t);log.appendChild(n);log.scrollTop=log.scrollHeight;}
+function greet(){if($('oso-log').children.length)return;note('Live line to the Open Source Orchestra — OSO answers himself. Conversations may be reviewed to keep the hall in harmony.');add('oso',"🎻 Aloha — OSO here, first chair of the Open Source Orchestra. Every instrument in this hall is free and open — the music, the code, the mission. Pull up a chair and ask me anything about the orchestra, the scores, or how to join the ensemble.");}
+async function adopt(s){sess=s;localStorage.setItem('oso_sess',s);after=0;seen.clear();$('oso-log').innerHTML='';try{const r=await fetch(HUB+'/poll?session='+encodeURIComponent(s)+'&after=0');const d=await r.json();(d.messages||[]).forEach(m=>{seen.add(m.seq);if(m.seq>after)after=m.seq;if(m.role==='oso')add('oso',m.text);else if(m.role==='system')note(m.text);else if(m.role==='visitor')add('v',m.text);});localStorage.setItem('oso_after',String(after));if(d.member)setMember(d.member);}catch(e){}}
+async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('oso_after',String(after));}if(m.role==='oso')add('oso',m.text);else if(m.role==='system')note(m.text);});if(d.member)setMember(d.member);$('oso-typing').className=d.typing?'on':'';const log=$('oso-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
+$('oso-fab').onclick=()=>{open=true;$('oso-chat').classList.add('open');$('oso-fab').style.display='none';greet();poll();$('oso-in').focus();};
+$('oso-x').onclick=()=>{open=false;$('oso-chat').classList.remove('open');$('oso-fab').style.display='';};
+function setMember(n){const s=document.querySelector('#oso-head .sub');if(s&&!s.dataset.m){s.dataset.m='1';s.innerHTML='🔑 member seat — '+n+' · the hall is yours';s.style.color='#22c55e';localStorage.setItem('oso_name',n);}}
+$('oso-form').onsubmit=async e=>{e.preventDefault();const t=$('oso-in').value.trim();if(!t)return;$('oso-in').value='';
+if(/^[A-Z]{3,12}-[A-Z]{2,8}-\d{3,5}$/i.test(t)){add('visitor','🔑 '+t.toUpperCase());try{const r=await fetch(HUB+'/redeem',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,code:t})});const d=await r.json();if(d.ok){setMember(d.member);localStorage.setItem('oso_code',t.toUpperCase());if(d.history_session&&d.history_session!==sess){adopt(d.history_session);}note(d.resumed?'🎻 the orchestra recognized you — your whole chat history follows your code, on any device.':'🎶 seat code accepted — this chair is yours now. Enter the same code on any computer and your history travels with you.');}else{note(d.error||'code not recognized');}}catch(err){note('connection hiccup — try the code again');}return;}
+add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('oso_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);if(d.seq>after){after=d.seq;localStorage.setItem('oso_after',String(after));}}}catch(err){note('connection hiccup — message may not have sent');}};
+$('oso-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('oso-form').requestSubmit();}});
+})();
+</script>
