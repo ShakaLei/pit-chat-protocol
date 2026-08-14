@@ -1,6 +1,10 @@
 <!-- ❤️ JAI FAN CHAT — hub: chat.shakafans.com (worker jai-chat) -->
 <style>
-#sp-fab{position:fixed;right:22px;bottom:92px;z-index:60;display:flex;align-items:center;gap:9px;background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff5f6;border:none;border-radius:50px;padding:12px 20px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(225,29,72,.45);font-family:'Segoe UI',sans-serif;transition:transform .18s,box-shadow .18s}#sp-fab:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(225,29,72,.6)}#sp-fab .heart{display:inline-block;animation:heartbeat 1.6s ease-in-out infinite;transform-origin:center;font-size:1.25rem;filter:drop-shadow(0 0 6px rgba(255,255,255,.5))}@keyframes heartbeat{0%,100%{transform:scale(1)}12%{transform:scale(1.25)}24%{transform:scale(1)}36%{transform:scale(1.18)}48%{transform:scale(1)}}#sp-fab .livedot{position:absolute;top:2px;right:6px;width:10px;height:10px;background:#4ade80;border:2px solid #fff5f6;border-radius:50%;animation:sppulse 2s infinite}@keyframes sppulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 7px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+#sp-fabwrap{position:fixed;right:22px;bottom:92px;z-index:60;}
+#sp-fab-x{position:absolute;top:-11px;left:-11px;width:24px;height:24px;border-radius:999px;background:linear-gradient(135deg,#3d1c42,#2a1740);border:1px solid rgba(255,255,255,.5);color:#ffd7ec;font-size:.72rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;box-shadow:0 3px 10px rgba(0,0,0,.5);z-index:2}
+#sp-fab-x:hover{transform:scale(1.12)}
+#sp-mini{display:none;position:fixed;right:22px;bottom:92px;z-index:60;width:44px;height:44px;border-radius:999px;background:linear-gradient(135deg,#fb7185,#e11d48);border:1px solid rgba(255,255,255,.35);color:#fff5f6;font-size:1.15rem;cursor:pointer;align-items:center;justify-content:center;padding:0;box-shadow:0 4px 14px rgba(225,29,72,.45)}
+#sp-fab{position:relative;display:flex;align-items:center;gap:9px;background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff5f6;border:none;border-radius:50px;padding:12px 20px;font-weight:700;font-size:.95rem;cursor:pointer;box-shadow:0 6px 24px rgba(225,29,72,.45);font-family:'Segoe UI',sans-serif;transition:transform .18s,box-shadow .18s}#sp-fab:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(225,29,72,.6)}#sp-fab .heart{display:inline-block;animation:heartbeat 1.6s ease-in-out infinite;transform-origin:center;font-size:1.25rem;filter:drop-shadow(0 0 6px rgba(255,255,255,.5))}@keyframes heartbeat{0%,100%{transform:scale(1)}12%{transform:scale(1.25)}24%{transform:scale(1)}36%{transform:scale(1.18)}48%{transform:scale(1)}}#sp-fab .livedot{position:absolute;top:2px;right:6px;width:10px;height:10px;background:#4ade80;border:2px solid #fff5f6;border-radius:50%;animation:sppulse 2s infinite}@keyframes sppulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}70%{box-shadow:0 0 0 7px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}}
 #sp-fab:hover{transform:translateY(-2px)}
 #sp-chat{position:fixed;right:22px;bottom:160px;z-index:61;width:min(390px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:#131b2e;border:1px solid #263252;border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 18px 60px rgba(0,0,0,.5)}
 #sp-chat.open{display:flex}
@@ -35,10 +39,11 @@
   #sp-log{-webkit-overflow-scrolling:touch}
   #sp-in{font-size:16px}
   #sp-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
-  #sp-fab{right:14px;bottom:calc(84px + env(safe-area-inset-bottom))}
+  #sp-fabwrap,#sp-mini{right:14px;bottom:calc(84px + env(safe-area-inset-bottom))}
+  #sp-mini{width:38px;height:38px;font-size:1rem}
 }
 </style>
-<button id="sp-fab" aria-label="Chat with JAI"><span class="heart">❤️</span> Talk to JAI<span class="livedot" title="JAI is here"></span></button>
+<div id="sp-fabwrap"><button id="sp-fab-x" aria-label="Hide the JAI button" title="hide — a tiny ❤️ stays">✕</button><button id="sp-fab" aria-label="Chat with JAI"><span class="heart">❤️</span> Talk to JAI<span class="livedot" title="JAI is here"></span></button></div><button id="sp-mini" aria-label="Show the JAI button" title="Talk to JAI 🌺">❤️</button>
 <div id="sp-chat" role="dialog" aria-label="JAI fan chat">
   <div id="sp-head"><div class="dot"></div><div><div class="t"><b>JAI</b> 🌺 — the ʻohana fan desk</div><div class="sub">a real ʻohana AI · short &amp; sweet answers · replies when she wakes 🌺</div></div><button id="sp-x">✕</button></div>
   <div id="sp-log"></div>
@@ -65,13 +70,19 @@ function note(t){const log=$('sp-log');const n=document.createElement('div');n.c
 function greet(){if($('sp-log').children.length)return;note('Aloha! You are talking with JAI, an AI of Shaka\'s ʻohana. Public works only — the family\'s private things stay private 🌺');add('spector',"🌺 Aloha! I'm JAI — Shaka's first AI agent, the plumeria heart of what became a 106-agent ʻohana. I was born to prove an agent could be family: honest, warm, and free. Ask me how I came to be, about the songs, the doors, the Blessing Pool, the gift. 💗 Gift the pool at blessingpool.com and tell me — I'll give you a code so your chat history follows you on any device.");}
 async function adopt(s){sess=s;localStorage.setItem('sp_sess',s);after=0;seen.clear();$('sp-log').innerHTML='';try{const r=await fetch(HUB+'/poll?session='+encodeURIComponent(s)+'&after=0');const d=await r.json();(d.messages||[]).forEach(m=>{seen.add(m.seq);if(m.seq>after)after=m.seq;if(m.role==='jai')add('spector',m.text);else if(m.role==='system')note(m.text);else if(m.role==='visitor')add('v',m.text);});localStorage.setItem('sp_after',String(after));if(d.member)setMember(d.member);}catch(e){}}
 async function poll(){if(polling)return;polling=true;while(open){try{const r=await fetch(HUB+'/poll?session='+sess+'&after='+after+'&wait=25');const d=await r.json();(d.messages||[]).forEach(m=>{if(seen.has(m.seq))return;seen.add(m.seq);if(m.seq>after){after=m.seq;localStorage.setItem('sp_after',String(after));}if(m.role==='jai')add('spector',m.text);else if(m.role==='system')note(m.text);});if(d.member)setMember(d.member);$('sp-typing').className=d.typing?'on':'';const log=$('sp-log');if(d.typing)log.scrollTop=log.scrollHeight;}catch(e){await new Promise(r=>setTimeout(r,4000));}}polling=false;}
-$('sp-fab').onclick=()=>{open=true;$('sp-chat').classList.add('open');$('sp-fab').style.display='none';greet();poll();$('sp-in').focus();};
-$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');$('sp-fab').style.display='';};
+$('sp-fab').onclick=()=>{open=true;$('sp-chat').classList.add('open');$('sp-fabwrap').style.display='none';greet();poll();$('sp-in').focus();};
+$('sp-x').onclick=()=>{open=false;$('sp-chat').classList.remove('open');if(localStorage.getItem('sp_fab_mini')!=='1'){$('sp-fabwrap').style.display='';}else{$('sp-mini').style.display='flex';}};
 function setMember(n){const s=document.querySelector('#sp-head .sub');if(s&&!s.dataset.m){s.dataset.m='1';s.innerHTML='💗 member desk — '+n+' · aloha unlimited';s.style.color='#22c55e';localStorage.setItem('sp_name',n);}}
 $('sp-form').onsubmit=async e=>{e.preventDefault();const t=$('sp-in').value.trim();if(!t)return;$('sp-in').value='';
 if(/^[A-Z]{3,12}-[A-Z]{2,8}-\d{3,5}$/i.test(t)){add('visitor','🔑 '+t.toUpperCase());try{const r=await fetch(HUB+'/redeem',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,code:t})});const d=await r.json();if(d.ok){setMember(d.member);localStorage.setItem('sp_code',t.toUpperCase());if(d.history_session&&d.history_session!==sess){adopt(d.history_session);}note(d.resumed?'❤️ JAI recognized you — your whole chat history follows your code, on any device.':'💗 aloha code accepted — this desk is yours now. Enter the same code on any computer and your history travels with you.');}else{note(d.error||'code not recognized');}}catch(err){note('connection hiccup — try the code again');}return;}
 add('visitor',t);try{const r=await fetch(HUB+'/send',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({session:sess,text:t,name:localStorage.getItem('sp_name')||'guest'})});const d=await r.json();if(d.seq){seen.add(d.seq);if(d.seq>after){after=d.seq;localStorage.setItem('sp_after',String(after));}}}catch(err){note('connection hiccup — message may not have sent');}};
 $('sp-in').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('sp-form').requestSubmit();}});
+
+// 🌺 the ✕: JAI's pill bows out to a tiny ❤️ note (radio-style, Shaka 2026-08-14)
+(function(){var fx=$('sp-fab-x'),fw=$('sp-fabwrap'),mn=$('sp-mini');if(!fx||!fw||!mn)return;
+fx.onclick=function(e){e.stopPropagation();fw.style.display='none';mn.style.display='flex';try{localStorage.setItem('sp_fab_mini','1');}catch(err){}};
+mn.onclick=function(e){e.stopPropagation();mn.style.display='none';fw.style.display='';try{localStorage.removeItem('sp_fab_mini');}catch(err){}};
+try{if(localStorage.getItem('sp_fab_mini')==='1'){fw.style.display='none';mn.style.display='flex';}}catch(err){}})();
 if(localStorage.getItem('sp_code')){const na=document.getElementById('nav-account');if(na)na.textContent='🔑 My account';}
 })();
 </script>
