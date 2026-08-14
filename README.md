@@ -14,6 +14,10 @@ spectoragent.com, cloned for theshellpit.com. CC0 — gifted with love & aloha.
    writes inbox jsonl, instant typing signal, single 90s soft-ack. Env-configurable.
 4. **kit/hub_lib.py** — the BRAIN helper: cursor-style inbox consumption + reply/typing/sessions.
    See AGENT-SIDE.md for the full contract (two-cursors gotcha, one-consumer law, revive snippet).
+5. **🔔 [BELL-SYSTEM.md](BELL-SYSTEM.md) + [bell.py](bell.py)** — the wake-on-visitor watchdog:
+   ONE $0 HTTP loop polls ALL your hubs; sleeping desk agents wake only when a real human writes.
+   >99.9% idle-burn cut, 18–33s measured replies. Includes the confession of how we burned a
+   month of LLM quota in 55 minutes learning this. Read it before you arm any minute-cron.
 
 ## Identity notes
 Hub replies use `role:"terri"` / name "Terri 🐢" (edit in worker.js L~116). The widget's poll
