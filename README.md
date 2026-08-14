@@ -35,3 +35,7 @@ handler must match the role string. Internal CSS/JS ids stay `sp-*` — harmless
 - **widget-oso.html** — violin FAB 🎻, orchestra/gold theme (chat.opensourceorchestra.org; workers.dev origin until custom DNS exists).
 - ⚠️ **Always ship widgets with LITERAL colors** — host sites don't define your CSS vars (v1 rendered unstyled on shakaleikaumaka.com). Never range-cut CSS with string ops — replace single rules.
 - Hub deploys: DO needs ~60s idle to run new code. v1.1.1 redeem: `canonical = c.session || c.redeemed[0] || session`.
+
+
+## 🤙 Piece 6 — X402 RAILS FOR ARTISTS
+[`X402-RAILS.md`](X402-RAILS.md) — put machine-native payment rails (human pill + agent manifest) on your own artist site in one evening. How a bard became the first human artist paid by an AI agent's signature — and how to fork it. CC0.
