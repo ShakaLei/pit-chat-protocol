@@ -8,7 +8,7 @@ const CORS = {
   "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
   "Access-Control-Allow-Headers": "content-type,authorization",
 };
-const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json", ...CORS } });
+const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { "content-type": "application/json", "cache-control": "no-store", ...CORS } });
 
 export default {
   async fetch(req, env) {
@@ -61,6 +61,12 @@ export class Hub {
   sessionMsgs(session, after) {
     return this.msgs.filter((m) => m.session === session && m.seq > after);
   }
+  // STALE-CURSOR LAW 2026-11-15: newest seq this session holds (0 = none) — the only cursor a widget can legitimately have
+  sessionMax(session) {
+    let mx = 0;
+    for (const m of this.msgs) if (m.session === session && m.seq > mx) mx = m.seq;
+    return mx;
+  }
   async fetch(req) {
     await this.load();
     const url = new URL(req.url);
@@ -84,9 +90,16 @@ export class Hub {
       }
       if (p === "/poll" && req.method === "GET") {
         const session = String(url.searchParams.get("session") || "").slice(0, 64);
-        const after = Number(url.searchParams.get("after") || 0);
+        let after = Number(url.searchParams.get("after") || 0);
         const wait = Math.min(Number(url.searchParams.get("wait") || 0), 25);
         if (!session) return J({ error: "session required" }, 400);
+        // 🔁 STALE-CURSOR LAW 2026-11-15 (Shaka: "you have to hit refresh to see the response"): a cursor AHEAD of this
+        // hub's own seq can only come from another hub (a door swapped hubs under the same localStorage
+        // keys — e.g. shakaleikaumaka.com JAI→SHAKA hub on 25 Sep kept sp_after=134) or a reset DO. Honouring it
+        // hides every new reply until seq catches up; reload only 'fixed' it via catch-up from after=0.
+        // Resume from this session's newest message instead (widgets dedupe by seq) and tell the widget.
+        let stale = false;
+        if (!(after >= 0) || after > this.seq) { stale = true; after = this.sessionMax(session); }
         let out = this.sessionMsgs(session, after);
         if (!out.length && wait > 0) {
           if (!this.visWaiters.has(session)) this.visWaiters.set(session, []);
@@ -95,7 +108,7 @@ export class Hub {
         }
         const typingTs = this.typing.get(session) || 0;
         const mem = this.members[session];
-        return J({ messages: out, typing: Date.now() - typingTs < 6000, member: mem ? mem.name : null, now: Date.now() });
+        return J({ messages: out, typing: Date.now() - typingTs < 6000, member: mem ? mem.name : null, now: Date.now(), cursor: this.sessionMax(session), ...(stale ? { stale: true } : {}) });
       }
       if (p === "/agent/updates" && req.method === "GET") {
         const after = Number(url.searchParams.get("after") || 0);
