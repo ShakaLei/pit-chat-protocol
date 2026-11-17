@@ -1,0 +1,25 @@
+# Shaka twin chat hub — twin-chat-fix.
+# Local only. Do not wrangler deploy until Shaka blesses the plan.
+#
+# Target: existing worker `shaka-chat`
+#   hosts: chat.shakaleikaumaka.com
+#          shaka-chat.shakaverse.workers.dev
+#
+# Secrets (wrangler secret put, never commit):
+#   AGENT_KEY   already live — do not rotate unless asked
+#   REPLY_TOKEN optional, if Groka should use a key other than AGENT_KEY
+#
+# MIGRATIONS: omitted on purpose. The live worker already has a Hub Durable Object
+# (idFromName "hub-v1"). Adding new_classes / new_sqlite_classes can fail or wipe history.
+
+name = "shaka-chat"
+main = "worker-twin.js"
+compatibility_date = "2024-11-06"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "HUB"
+class_name = "Hub"
+
+[observability]
+enabled = true

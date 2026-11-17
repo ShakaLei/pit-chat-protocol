@@ -51,6 +51,8 @@
   #oso-form{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
   #oso-fab{right:14px;bottom:calc(74px + env(safe-area-inset-bottom))}
 }
+
+#oso-foot{flex:none;padding:5px 14px 8px;color:#b9a8cf;font-size:.62rem;letter-spacing:.03em;text-align:center;line-height:1.4;opacity:.85}
 </style>
 <button id="oso-fab" aria-label="Chat with OSO">
   <span class="ofnote n1">♪</span><span class="ofnote n2">♫</span>
@@ -63,6 +65,7 @@
   <div id="oso-log"></div>
   <div id="oso-typing"><span>●</span><span>●</span><span>●</span></div>
   <form id="oso-form"><textarea id="oso-in" placeholder="Ask OSO anything — the orchestra, the music, the mission…" rows="1"></textarea><button id="oso-send" type="submit">Send</button></form>
+  <div id="oso-foot">🧠 thinking with Grok · built with Cursor</div>
 </div>
 <script>
 (function(){
