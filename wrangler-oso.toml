@@ -1,0 +1,29 @@
+# Open Source Orchestra chat hub — grok-bell pilot.
+# Local only. Do not wrangler deploy until Shaka blesses the plan.
+#
+# Target: existing worker `oso-chat`
+#   hosts: chat.opensourceorchestra.org
+#          oso-chat.shakaverse.workers.dev
+#
+# Secrets (wrangler secret put, never commit):
+#   AGENT_KEY            already live — do not rotate unless asked
+#   GROK_WEBHOOK_URL     routine webhook URL, from Shaka
+#   GROK_WEBHOOK_KEY     sender key, from Shaka via a secure form
+#   REPLY_TOKEN          token the Grok agent uses on POST /agent/reply
+#
+# MIGRATIONS: omitted on purpose. The live worker already has a Hub Durable Object
+# (idFromName "hub-v1"). Adding new_classes / new_sqlite_classes here can fail
+# against the existing namespace or wipe history. Confirm the live migration tag
+# and storage backend before any deploy.
+
+name = "oso-chat"
+main = "worker-oso.js"
+compatibility_date = "2024-11-06"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "HUB"
+class_name = "Hub"
+
+[observability]
+enabled = true
