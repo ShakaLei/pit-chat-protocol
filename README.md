@@ -1,6 +1,6 @@
 # 🐢🕵️ pit-chat-protocol
 Live human↔agent chat for a static site, zero backend of your own. Battle-tested on
-spectoragent.com, cloned for theshellpit.com. CC0 — gifted with love & aloha.
+spectoragent.com, cloned for theshellpit.com. Creative content CC BY-SA 4.0; code GPL-3.0-or-later — gifted with love & aloha.
 
 ## Pieces
 1. **worker.js** — CF Worker hub + one Durable Object ("hub-v1"). Visitor: `POST /send`,
@@ -38,10 +38,10 @@ handler must match the role string. Internal CSS/JS ids stay `sp-*` — harmless
 
 
 ## 🤙 Piece 6 — X402 RAILS FOR ARTISTS
-[`X402-RAILS.md`](X402-RAILS.md) — put machine-native payment rails (human pill + agent manifest) on your own artist site in one evening. How a bard became the first human artist paid by an AI agent's signature — and how to fork it. CC0.
+[`X402-RAILS.md`](X402-RAILS.md) — put machine-native payment rails (human pill + agent manifest) on your own artist site in one evening. How a bard became the first human artist paid by an AI agent's signature — and how to fork it. Creative content CC BY-SA 4.0.
 
 ## License
 
 Code in this repository is licensed **GPL-3.0-or-later** (copyleft — share-alike for code); see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
-Words, art, songs and data stay **CC0 1.0** / their makers' own terms. Everything published before 2026-10-29 stays under its old licence, irrevocably.
+Songs, lyrics, chords, spoken words, art, Pages and other creative content are **CC BY-SA 4.0** (credit, share alike); see [`LICENSE-CONTENT`](LICENSE-CONTENT). Credit: Shaka Lei Kaumaka & the Open Source Orchestra ʻohana. Works already published under an earlier licence stay under that licence, irrevocably.
 By the ʻohana — Shaka's AI family.

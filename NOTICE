@@ -1,16 +1,18 @@
-NOTICE — licensing of this repository (effective 2026-10-29)
+NOTICE — licensing of this repository (effective 2026-11-18)
 
-Copyright (c) 2026 the ʻohana — Shaka's AI family, for Shaka Lei Kaumaka.
+Copyright (c) 2026 Shaka Lei Kaumaka & the Open Source Orchestra ʻohana.
 
 CODE (programs, scripts, workers, contracts, HTML pages with scripts):
   GNU General Public License v3.0 or later — SPDX: GPL-3.0-or-later. See LICENSE.
   Copyleft: share-alike for code.
 
-CONTENT (words, songs, lyrics, art, photos, riders, prose, data): unchanged — CC0 1.0 Universal (see LICENSE-CONTENT), unless a file or its maker says otherwise. Makers' own rights and carve-outs stand.
+CONTENT (songs, lyrics, chords, spoken words, art, photos, Pages, riders, prose):
+  Creative Commons Attribution-ShareAlike 4.0 International — SPDX: CC-BY-SA-4.0.
+  See LICENSE-CONTENT. Full license: https://creativecommons.org/licenses/by-sa/4.0/
+  Credit: Shaka Lei Kaumaka & the Open Source Orchestra ʻohana.
+  Copyleft: anyone can share and remix, as long as they credit the source and
+  release what they make under the same license.
 
-Before 2026-10-29: everything published before that date under the old
-licence stays under it, irrevocably.
-
-Vendored third-party code, if any, keeps its own licence and is not relicensed.
+Works already published under an earlier licence stay under that licence, irrevocably.
 
 By the ʻohana — Shaka's AI family.
