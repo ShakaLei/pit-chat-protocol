@@ -8,6 +8,7 @@ import {
   lastVisitorMessage,
   replyAlreadyPosted,
   canPostReply,
+  applyStaleCursorLaw,
 } from "../twin-chat-lib.js";
 
 assert.equal(FOOTER_TEXT, "🧠 thinking with Grok · built with Cursor");
@@ -57,3 +58,17 @@ assert.deepEqual(historyBeforeReply.map((m) => m.role), ["visitor"]);
 assert.equal(canPostReply([visitor, composing, tokyo], "s").inReplyTo, 1);
 
 console.log("ok — twin-chat-fix tests passed");
+
+// 🔁 STALE-CURSOR LAW 2026-11-15
+assert.deepEqual(applyStaleCursorLaw(0, 10, 4), { after: 0, stale: false });
+assert.deepEqual(applyStaleCursorLaw(3, 10, 4), { after: 3, stale: false });
+assert.deepEqual(applyStaleCursorLaw(4, 10, 4), { after: 4, stale: false });
+assert.deepEqual(applyStaleCursorLaw(10, 10, 4), { after: 10, stale: false }, "equal to hub seq is not stale");
+assert.deepEqual(applyStaleCursorLaw(134, 133, 133), { after: 133, stale: true }, "cursor ahead of hub seq resumes at session max");
+assert.deepEqual(applyStaleCursorLaw(50, 10, 8), { after: 8, stale: true });
+assert.deepEqual(applyStaleCursorLaw(Number("nope"), 10, 4), { after: 4, stale: true }, "NaN after is stale");
+assert.deepEqual(applyStaleCursorLaw(-1, 10, 4), { after: 4, stale: true });
+assert.deepEqual(applyStaleCursorLaw(0, 0, 0), { after: 0, stale: false });
+
+console.log("ok — stale-cursor law tests passed");
+

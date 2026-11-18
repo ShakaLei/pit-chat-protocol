@@ -78,3 +78,17 @@ export function canPostReply(msgs, session) {
   }
   return { ok: true, inReplyTo: last.seq };
 }
+
+// 🔁 STALE-CURSOR LAW 2026-11-15 (Shaka: "you have to hit refresh to see the response"):
+// a cursor AHEAD of this hub's own seq can only come from another hub (a door swapped hubs
+// under the same localStorage keys) or a reset DO. Honouring it hides every new reply until
+// seq catches up. Resume from this session's newest message and tell the widget {stale,cursor}.
+export function applyStaleCursorLaw(after, hubSeq, sessionMax) {
+  let stale = false;
+  let resume = after;
+  if (!(resume >= 0) || resume > hubSeq) {
+    stale = true;
+    resume = sessionMax;
+  }
+  return { after: resume, stale };
+}

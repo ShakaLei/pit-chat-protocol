@@ -10,6 +10,7 @@
 //   - /agent/reply is one reply per visitor message (409 if already answered)
 //   - /agent/reply is stamped role "jai" + name "SHAKA 🤙" so the live widget renders it
 //   - sleep/wait copy is timeless (no Tokyo, no future-tense Devcon 8)
+//   - /poll applies the 15 Nov stale-cursor law (resume + {stale,cursor}; responses no-store)
 // Keep class Hub + idFromName("hub-v1"). Do not add a new Durable Object migration.
 
 import { agentAuthorized, sessionCursor } from "./oso-grok-pilot-lib.js";
@@ -21,6 +22,7 @@ import {
   stripJunkHistory,
   threadHistory,
   canPostReply,
+  applyStaleCursorLaw,
 } from "./twin-chat-lib.js";
 
 export { WAIT_NOTE } from "./twin-chat-lib.js";
@@ -33,7 +35,7 @@ const CORS = {
 const J = (o, s = 200) =>
   new Response(JSON.stringify(o), {
     status: s,
-    headers: { "content-type": "application/json", ...CORS },
+    headers: { "content-type": "application/json", "cache-control": "no-store", ...CORS },
   });
 
 export default {
@@ -166,9 +168,15 @@ export class Hub {
 
       if (p === "/poll" && req.method === "GET") {
         const session = String(url.searchParams.get("session") || "").slice(0, 64);
-        const after = Number(url.searchParams.get("after") || 0);
+        let after = Number(url.searchParams.get("after") || 0);
         const wait = Math.min(Number(url.searchParams.get("wait") || 0), 25);
         if (!session) return J({ error: "session required" }, 400);
+        // 🔁 STALE-CURSOR LAW 2026-11-15 — same law as worker.js / the live 15 Nov deploy.
+        // A cursor ahead of this hub's seq (swapped hub or reset DO) would hide every new
+        // reply; resume from this session's newest message and flag {stale,cursor}.
+        const cursorAdj = applyStaleCursorLaw(after, this.seq, sessionCursor(this.msgs, session));
+        after = cursorAdj.after;
+        const stale = cursorAdj.stale;
         let out = this.sessionMsgs(session, after);
         if (!out.length && wait > 0) {
           if (!this.visWaiters.has(session)) this.visWaiters.set(session, []);
@@ -185,6 +193,7 @@ export class Hub {
           member: mem ? mem.name : null,
           now: Date.now(),
           cursor: sessionCursor(this.msgs, session),
+          ...(stale ? { stale: true } : {}),
         });
       }
 

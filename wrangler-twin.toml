@@ -1,5 +1,5 @@
 # Shaka twin chat hub — twin-chat-fix.
-# Local only. Do not wrangler deploy until Shaka blesses the plan.
+# Deploy only with a Workers-edit token. Never secret put, never rotate AGENT_KEY.
 #
 # Target: existing worker `shaka-chat`
 #   hosts: chat.shakaleikaumaka.com
@@ -14,7 +14,7 @@
 
 name = "shaka-chat"
 main = "worker-twin.js"
-compatibility_date = "2024-11-06"
+compatibility_date = "2026-08-01"
 workers_dev = true
 
 [[durable_objects.bindings]]
