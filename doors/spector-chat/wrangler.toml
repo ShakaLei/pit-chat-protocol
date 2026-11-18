@@ -1,0 +1,15 @@
+# spector-chat — ʻohana chat door. Source = the live 15 Nov script + the GROKA_KEY gate.
+# Secrets (never commit, never rotate AGENT_KEY): AGENT_KEY (live), GROKA_KEY (Groka/Pono), REPLY_TOKEN (optional).
+# MIGRATIONS omitted on purpose: the live Hub Durable Object (idFromName "hub-v1") must keep its history.
+# Deploy: wrangler deploy -c doors/spector-chat/wrangler.toml --keep-vars --durable-objects-code-update-mode immediate
+name = "spector-chat"
+main = "worker.js"
+compatibility_date = "2026-08-01"
+workers_dev = true
+
+[[durable_objects.bindings]]
+name = "HUB"
+class_name = "Hub"
+
+[observability]
+enabled = true
