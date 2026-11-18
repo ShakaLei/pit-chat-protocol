@@ -12,7 +12,14 @@ export const MAX_WAKES_PER_DAY = 200;
 
 export function agentAuthorized(authHeader, env) {
   const auth = authHeader || "";
-  const keys = [env && env.AGENT_KEY, env && env.REPLY_TOKEN].filter(Boolean);
+  // AGENT_KEY is the live secret (do not rotate). REPLY_TOKEN and GROKA_KEY are
+  // optional extra accepted bearers so Groka/Pono can use a separate key
+  // (HUB_KEY_TWIN) without learning or replacing AGENT_KEY.
+  const keys = [
+    env && env.AGENT_KEY,
+    env && env.REPLY_TOKEN,
+    env && env.GROKA_KEY,
+  ].filter(Boolean);
   return keys.some((k) => auth === `Bearer ${k}`);
 }
 

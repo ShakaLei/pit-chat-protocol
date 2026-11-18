@@ -14,13 +14,16 @@ import {
   sessionCursor,
 } from "../oso-grok-pilot-lib.js";
 
-const env = { AGENT_KEY: "agent-test", REPLY_TOKEN: "reply-test" };
+const env = { AGENT_KEY: "agent-test", REPLY_TOKEN: "reply-test", GROKA_KEY: "groka-test" };
 
 assert.equal(agentAuthorized("Bearer agent-test", env), true);
 assert.equal(agentAuthorized("Bearer reply-test", env), true);
+assert.equal(agentAuthorized("Bearer groka-test", env), true);
 assert.equal(agentAuthorized("Bearer no", env), false);
 assert.equal(agentAuthorized("", env), false);
 assert.equal(agentAuthorized("Bearer agent-test", {}), false);
+assert.equal(agentAuthorized("Bearer groka-test", { AGENT_KEY: "agent-test" }), false, "unset GROKA_KEY is not accepted");
+assert.equal(agentAuthorized("Bearer agent-test", { AGENT_KEY: "agent-test", GROKA_KEY: "groka-test" }), true, "AGENT_KEY still works when GROKA_KEY is also set");
 
 assert.equal(isWakeWorthyVisitorMessage({ role: "visitor", text: "aloha" }), true);
 assert.equal(isWakeWorthyVisitorMessage({ role: "visitor", text: "   " }), false);

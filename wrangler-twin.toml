@@ -5,9 +5,11 @@
 #   hosts: chat.shakaleikaumaka.com
 #          shaka-chat.shakaverse.workers.dev
 #
-# Secrets (wrangler secret put, never commit):
+# Secrets (wrangler secret put, never commit, never rotate AGENT_KEY):
 #   AGENT_KEY   already live — do not rotate unless asked
-#   REPLY_TOKEN optional, if Groka should use a key other than AGENT_KEY
+#   REPLY_TOKEN optional extra accepted bearer
+#   GROKA_KEY   optional extra accepted bearer for Groka/Pono (HUB_KEY_TWIN).
+#               Unset = no change. Set only after Shaka's explicit go.
 #
 # MIGRATIONS: omitted on purpose. The live worker already has a Hub Durable Object
 # (idFromName "hub-v1"). Adding new_classes / new_sqlite_classes can fail or wipe history.

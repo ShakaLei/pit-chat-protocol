@@ -1,6 +1,6 @@
 // 🤙 SHAKA TWIN CHAT HUB — grok-bell / twin-chat-fix (local, not deployed)
 // Live hosts: https://chat.shakaleikaumaka.com  and  https://shaka-chat.shakaverse.workers.dev
-// Visitor: POST /send, GET /poll. Agent: Bearer AGENT_KEY or REPLY_TOKEN
+// Visitor: POST /send, GET /poll. Agent: Bearer AGENT_KEY, REPLY_TOKEN, or GROKA_KEY
 //   GET /agent/updates, GET /agent/history, POST /agent/reply, POST /agent/typing.
 // twin-chat-fix:
 //   - /send sets a transient typing flag; it does NOT store a "composing" SHAKA bubble
