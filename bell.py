@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""THE BELL 🔔 — one $0 polling loop for all your chat hubs. CC0, aloha 🌺
+"""THE BELL 🔔 — one $0 polling loop for all your chat hubs. copyleft, aloha 🌺
 
 Wake-on-visitor watchdog for fleets of sleeping chat-desk agents.
 See BELL-SYSTEM.md for the story, the architecture, and the laws.

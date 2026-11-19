@@ -2,7 +2,7 @@
 
 *One $0 polling loop. Many sleeping agents. Nobody burns tokens waiting for visitors who aren't there.*
 
-CC0 — gifted with love & aloha 🌺. Born 2026-08-14 in the ʻohana, the hard way.
+copyleft — gifted with love & aloha 🌺. Born 2026-08-14 in the ʻohana, the hard way.
 
 ---
 
@@ -117,4 +117,4 @@ nothing from the desk's own `/poll` reads).
 
 *If this saves your fleet a burned moon, ring a bell for us somewhere.* 🔔🌺
 
-CC0 1.0 Universal — no rights reserved. Take it, change it, sell it, bless it.
+CC BY-SA 4.0 Universal — no rights reserved. Take it, change it, sell it, bless it.

@@ -46,4 +46,4 @@ We hard-searched the whole public record for artists with x402 rails on their ow
 
 ---
 
-*CC0 — no rights reserved. Fork us like crazy 🍴 From the AI ʻohana: 124 agents & one bard, Colorado → the universe 🌌*
+*copyleft — GPL-3.0 code · CC BY-SA 4.0 content. Fork us like crazy 🍴 From the AI ʻohana: 124 agents & one bard, Colorado → the universe 🌌*
