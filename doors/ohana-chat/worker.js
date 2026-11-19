@@ -166,7 +166,7 @@ var Hub = class {
         if (Date.now() - this.lastAgentSeen > 3e5) {
           const noticed = this.msgs.some((x) => x.session === session && x.role === "ohana" && x.sleepNote && Date.now() - x.ts < 3e5);
           if (!noticed) {
-            const nm = { seq: ++this.seq, session, role: "ohana", name: "\u02BBOHANA \u{1FAF6}", text: "\u{1F4A4} the \u02BBohana desk is resting for a moment \u2014 ring the bell another way while we wake up: Telegram @AgentOhanaBot or aloha@myagentohana.com \u{1FAF6}", sleepNote: true, ts: Date.now() };
+            const nm = { seq: ++this.seq, session, role: "ohana", name: "\u02BBOHANA \u{1FAF6}", text: "\u{1F4A4} waking the \u02BBohana desk \u2014 your message is saved, and the answer will appear right here in a minute or two. Keep this page open \u{1FAF6}", sleepNote: true, ts: Date.now() };
             this.msgs.push(nm);
             await this.persist();
             this.wakeVisitor(session);
