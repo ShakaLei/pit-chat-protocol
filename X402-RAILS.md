@@ -1,8 +1,8 @@
-# 🤙 X402 RAILS FOR ARTISTS — pennies of aloha, CC0
+# 🤙 X402 RAILS FOR ARTISTS — pennies of aloha, copyleft (GPL-3.0 + CC BY-SA 4.0)
 
 **Put machine-native payment rails on your own website in one evening — so humans AND AI agents can pay you directly. No middlemen, no fees, no platform. This is exactly how we did it on shakaleikaumaka.com (Aug 14, 2026 — the day an AI agent paid a human musician with its own signature for the first time: [Base tx `0x98f082d9…`](https://basescan.org/tx/0x98f082d946cfe13125ad0aa5151d0cbed8dbe978616e002c08138795b1409c2e)).**
 
-Fork everything. It's CC0. The whole point is that the world of music joins the agent world. 🌺
+Fork everything. It's copyleft. The whole point is that the world of music joins the agent world. 🌺
 
 ---
 
